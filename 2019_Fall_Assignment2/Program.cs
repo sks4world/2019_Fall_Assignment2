@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace _2019_Fall_Assignment2
 {
@@ -100,6 +102,33 @@ namespace _2019_Fall_Assignment2
 
         public static int LargestUniqueNumber(int[] A)
         {
+            //SKS: Srikrishna Krishnarao Srinivasan Sep 27 2019
+            //Initialize
+            string p=null, str1=null;
+            int count = 0;
+
+            //SKS Sep 27 2019: Pseudocode 1
+            p = "1. Read the input array and sort it ascending. Convert Array to string str1. Lets say str1=1112234477\n" +
+                "2. Create a For loop to start reading from the end of the string str1.Substring(i,1), i = str1.Length its 11 in this case\n" +
+                "3. Store three consecutive characters obtained in the for loop c.last, c.last-1, c.last-2\n" +
+                "4. Check if c.last == c.last-1. If true, continue the for loop (number is repeating). If false,check if c.last-1==c.last-2 \n" +
+                "4a. If c.last-1==c.last-2, then it is transition, but still new number is repeating. Continue the for loop\n" +
+                "4b. If c.last-1!=c.last-2, then the number transitioned, but not repeating, break the for loop and report answer\n" +
+                "5. Boundary conditions: C1:Empty array, C2:single element array, C3:array with all digits same (optimize this case by count before iteration), C4:array with all digits different  ";
+            Debug.WriteLine(p);
+
+            //SKS Sep 27 2019: Pseudocode 2 (This is optimized and more efficient code based on Case 3 (C3) mentioned in Pseudocode 1
+            p = "1. Read the input array and sort it ascending. Convert Array to string str1. Lets say str1=1112234477\n" +
+                "2. Create a For loop to start reading from the end of the string str1.Substring(i,1), i = str1.Length its 11 in this case\n" +
+                "3. Do a Regex search of the obtained character in the for loop in the full string. If the result is 1, break the for loop and report the answer.";
+
+
+            str1 = "1112234477";
+            count=Regex.Matches(str1, "4").Count;
+            Debug.WriteLine(count);
+            count=Regex.Matches(str1, "3").Count;
+            Debug.WriteLine(count);
+
             try
             {
                 // Write your code here
