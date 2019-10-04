@@ -10,7 +10,7 @@ namespace _2019_Fall_Assignment2
     {
         public static void Main(string[] args)
         {
-            int target = 5;
+            int target = 2;
             int[] nums = { 1, 3, 5, 6 };
             Console.WriteLine("Position to insert {0} is = {1}\n", target, SearchInsert(nums, target));
 
@@ -80,6 +80,31 @@ namespace _2019_Fall_Assignment2
             try
             {
                 // Write your code here
+                /*
+                 Pragati Shukla
+                 Pseudocode:
+                 As the array is sorted, can check if the Target is less than the first element,
+                 I it is, can simply insert it on the 1st postion.
+                 If greater than that then compare with current and next element.
+                 As the array is sorted, if value is greater than current element and less than next, must be inserted in between those two
+                 Return that indexx value.
+                 If the target is greater than Last element, return last index+1.
+                 */
+                int start = 0;
+                int end = nums.Length - 1;
+                if (target<=nums[start] )
+                    return start;
+                if (target > nums[end])
+                    return end + 1;        
+                for (int i=0;i<end;i++)
+                 {
+                 if(target==nums[i])
+                 return i;
+                 if(target>nums[i] && target <nums[i+1])
+                 return i+1;
+
+                 }
+                return -1;
             }
             catch
             {
@@ -102,11 +127,9 @@ namespace _2019_Fall_Assignment2
                  Else There would be two cases, 
                  Case1.The value of current element from Array1 is less than Array2--in this case move to next element in array 1.
                  Case2.The value of current element from Array1 is greater than Array2--in this case move to next element in array 2.
-
-
-                 
-                 
-                 */
+                                                
+                                 */
+              
             }
             catch
             {
