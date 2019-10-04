@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace _2019_Fall_Assignment2
@@ -43,7 +44,7 @@ namespace _2019_Fall_Assignment2
             Console.Write("\n");
 
             string s = "abca";
-            if(ValidPalindrome(s)) {
+            if (ValidPalindrome(s)) {
                 Console.WriteLine("The given string \"{0}\" can be made PALINDROME", s);
             }
             else
@@ -104,34 +105,43 @@ namespace _2019_Fall_Assignment2
         {
             //SKS: Srikrishna Krishnarao Srinivasan Sep 27 2019
             //Initialize
-            string p=null, str1=null;
+            string str1 = null, strx=null;
             int count = 0;
 
             //SKS Sep 27 2019: Pseudocode 1
-            p = "1. Read the input array and sort it ascending. Convert Array to string str1. Lets say str1=1112234477\n" +
-                "2. Create a For loop to start reading from the end of the string str1.Substring(i,1), i = str1.Length its 11 in this case\n" +
-                "3. Store three consecutive characters obtained in the for loop c.last, c.last-1, c.last-2\n" +
-                "4. Check if c.last == c.last-1. If true, continue the for loop (number is repeating). If false,check if c.last-1==c.last-2 \n" +
-                "4a. If c.last-1==c.last-2, then it is transition, but still new number is repeating. Continue the for loop\n" +
-                "4b. If c.last-1!=c.last-2, then the number transitioned, but not repeating, break the for loop and report answer\n" +
-                "5. Boundary conditions: C1:Empty array, C2:single element array, C3:array with all digits same (optimize this case by count before iteration), C4:array with all digits different  ";
-            Debug.WriteLine(p);
+            //"1. Read the input array and sort it ascending. Convert Array to string str1. Lets say str1=1112234477\n" +
+            //    "2. Create a For loop to start reading from the end of the string str1.Substring(i,1), i = str1.Length its 11 in this case\n" +
+            //    "3. Store three consecutive characters obtained in the for loop c.last, c.last-1, c.last-2\n" +
+            //    "4. Check if c.last == c.last-1. If true, continue the for loop (number is repeating). If false,check if c.last-1==c.last-2 \n" +
+            //    "4a. If c.last-1==c.last-2, then it is transition, but still new number is repeating. Continue the for loop\n" +
+            //    "4b. If c.last-1!=c.last-2, then the number transitioned, but not repeating, break the for loop and report answer\n" +
+            //    "5. Boundary conditions: C1:Empty array, C2:single element array, C3:array with all digits same (optimize this case by count before iteration), C4:array with all digits different  ";
 
             //SKS Sep 27 2019: Pseudocode 2 (This is optimized and more efficient code based on Case 3 (C3) mentioned in Pseudocode 1
-            p = "1. Read the input array and sort it ascending. Convert Array to string str1. Lets say str1=1112234477\n" +
-                "2. Create a For loop to start reading from the end of the string str1.Substring(i,1), i = str1.Length its 11 in this case\n" +
-                "3. Do a Regex search of the obtained character in the for loop in the full string. If the result is 1, break the for loop and report the answer.";
+            // "1. Read the input array and sort it ascending. Convert Array to string str1. Lets say str1=1112234477\n" +
+            //    "2. Create a For loop to start reading from the end of the string str1.Substring(i,1), i = str1.Length its 11 in this case\n" +
+            //    "3. Do a Regex search of the obtained character in the for loop in the full string. If the result is 1, break the for loop and report the answer.";
 
-
-            str1 = "1112234477";
-            count=Regex.Matches(str1, "4").Count;
-            Debug.WriteLine(count);
-            count=Regex.Matches(str1, "3").Count;
-            Debug.WriteLine(count);
+            //count=Regex.Matches(str1, "4").Count;
+            //Debug.WriteLine(count);
+            //count=Regex.Matches(str1, "3").Count;
+            //Debug.WriteLine(count);
 
             try
             {
                 // Write your code here
+                Array.Sort(A);                      //Sort input array
+                str1 = string.Join("", A);          //Convert array to string
+                                                    //str1 = "1112234477";
+                for (int i = str1.Length-1; i >= 0; i--)
+                {
+                    strx = str1.Substring(i, 1);
+                    count = Regex.Matches(str1, strx).Count;
+                    if (count == 1)
+                    {
+                        return Int32.Parse(strx);
+                    }
+                }
             }
             catch
             {
@@ -201,7 +211,95 @@ namespace _2019_Fall_Assignment2
         {
             try
             {
+                //Srikrishna Krishnarao Srinivasan SKS Oct 4 2019
+                //Pseudocode
+                //1. Read input string. Proper cases: 'abcba', 'abcdcba'; Improper cases: 'abcxba', 'abcdxcba' 'x' can appear anywhere
+                //2. Reverse the string. 'abcba' or 'abcdcba' becomes the same. If so, it is palindrome.
+                //2a. String with extra 'x' or not as above: when reverse will not be the same. 'abcxba' will be 'abxcba' etc
+                //2c. Before making the decision as not-palindrome, try to find 'x' and drop and repeat step 2
+                //2d. Case 1: There is an 'x'. 1x23321, 12x3321, 123x321 or 12344321x, 1234432x1, 123443x21.
+                //2d.i. Split string into two: If Even length, both are equal strings. If Odd length, first is longer.
+                //2d.ii. Convert each string into string array https://stackoverflow.com/questions/11081549/how-to-convert-string-to-string
+                //2d.iii. Do a set subraction of string characters. This will give only non matched characters. string [] c = a.Where(x=>!b.Contains(x)).ToArray(); or string [] c = a.Except(b).ToArray(); https://stackoverflow.com/questions/5058609/how-to-perform-set-subtraction-on-arrays-in-c
+                //2d.iv. If there is only one character output from above, get it, find it in the string, remove and repeat steps 1 and 2
+                //2e. Case 2: There is no 'x' just that it is not palindrome
+
+                //Initialize
+                string s_rev = null, s1 = null, s2 = null, snew=null, s_revnew;
+                char c1;
+
                 // Write your code here
+                char[] charArray = s.ToCharArray();
+                Array.Reverse(charArray);
+                s_rev = string.Join("", charArray);
+                //s_rev = s.Reverse().ToArray();
+                if (s == s_rev)
+                {
+                    return true; //String is a palindrome
+                }
+                else 
+                {
+                    if (s.Length % 2 == 0) //Even length
+                    {
+                        s1 = s.Substring(0,s.Length/2);
+                        s2 = s.Substring(s.Length/2, s.Length/2);
+                    }
+                    else //Odd
+                    {
+                        s1 = s.Substring(0,(s.Length/2)+1);
+                        s2 = s.Substring((s.Length/2), (s.Length/2)+1);
+                    }
+                    //Convert string to array
+                    //string[] s1a= new string[]{s1};
+                    //string[] s2a= new string[]{s2};
+                    char[] s1a = s1.ToCharArray();
+                    char[] s2a = s2.ToCharArray();
+                    //string c1 = null;
+                    //string [] c = s1a.Where(x=>!s2a.Contains(x)).ToArray();
+                    char[] c = s1a.Where(x => !s2a.Contains(x)).ToArray();
+                    //This will return all characters in s1a[] which don't have a matching value in s2a[].
+
+                    if (c.Length == 0)
+                    {
+                        c = s2a.Where(x => !s1a.Contains(x)).ToArray();
+                        //Reverse search
+                    }
+
+
+                    if (c.Length == 1) //We need to continue only if single character mismatch happens
+                    {
+                        //Find and drop this character in original string s
+                        //reverse the string
+                        //if reversed string is same as original string it is a palindrome
+                        c1 = c[0];
+                        int index1 = s.IndexOf(c1);
+                        if (index1 != -1)
+                        {
+                            snew = s.Remove(index1, 1);
+                            char[] charArray1 = snew.ToCharArray();
+                            Array.Reverse(charArray1);
+                            s_revnew = string.Join("", charArray1);
+                            if (snew == s_revnew)
+                            {
+                                return true; //String is a palindrome
+                            }
+                            else
+                            {
+                                return false; //String is not a palindrome
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return false;//More than one character mismatch, hence not a palindrome by dropping one character
+                    }
+                }
+
+                    
+
+                
+
+
             }
             catch
             {
