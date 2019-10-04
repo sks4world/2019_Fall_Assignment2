@@ -94,6 +94,19 @@ namespace _2019_Fall_Assignment2
             try
             {
                 // Write your code here
+                /*Pragati Shukla
+                 Pseudocode:
+                 Sort both the Arrays.
+                 Keep comparing the values for each element using a loop.
+                 If the first value of array 1 matches with the first one of Array2, Add this vlaue to a list.
+                 Else There would be two cases, 
+                 Case1.The value of current element from Array1 is less than Array2--in this case move to next element in array 1.
+                 Case2.The value of current element from Array1 is greater than Array2--in this case move to next element in array 2.
+
+
+                 
+                 
+                 */
             }
             catch
             {
