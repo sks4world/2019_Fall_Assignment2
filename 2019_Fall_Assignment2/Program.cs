@@ -33,15 +33,16 @@ namespace _2019_Fall_Assignment2
             Display2DArray(flipAndInvertedImage);
             Console.Write("\n");
 
-            int[,] intervals = { { 0, 30 }, { 5, 10 }, { 15, 20 } };
-            int minMeetingRooms = MinMeetingRooms(intervals);
-            Console.WriteLine("Minimum meeting rooms needed = {0}\n", minMeetingRooms);
+            int[,] a = { { 40, 30 }, { 20, 10 }, { 15, 20 } };
+            Console.WriteLine(MinMeetingRooms(a));
 
-            int[] arr = { -4, -1, 0, 3, 10 };
-            int[] sortedSquares = SortedSquares(arr);
-            Console.WriteLine("Squares of the array in sorted order is:");
-            DisplayArray(sortedSquares);
-            Console.Write("\n");
+            int[] input = { -4, -1, 0, 3, 10 };
+            int[] o = new int[input.Length];
+            o = SortedSquares(input);
+            for(int j=0;j<o.Length;j++)
+            {
+                Console.Write(o[j]+" ");
+            }
 
             string s = "abca";
             if (ValidPalindrome(s)) {
@@ -183,7 +184,29 @@ namespace _2019_Fall_Assignment2
         {
             try
             {
-                // Write your code here
+                int[] d = new int[3];
+            for (int i = 0; i < 3; i++)
+            {
+                int j = 0, k = 0, t = 0;
+                if (intervals[i, j] > intervals[i, j + 1])
+                {
+
+                    t = intervals[i, j];
+                    intervals[i, j] = intervals[i, j + 1];
+                    intervals[i, j + 1] = t;
+
+                    k = intervals[i, j + 1] - intervals[i, j];
+                    d[i] = k;
+                }
+                else
+                {
+                    k = intervals[i, j + 1] - intervals[i, j];
+                    d[i] = k;
+                }
+
+            }
+            Array.Sort(d);
+            return d[0];
             }
             catch
             {
@@ -197,7 +220,13 @@ namespace _2019_Fall_Assignment2
         {
             try
             {
-                // Write your code here
+               for (int i = 0; i < A.Length; i++)
+            {
+                A[i] = A[i] * A[i];
+
+            }
+            Array.Sort(A);
+            return A;
             }
             catch
             {
