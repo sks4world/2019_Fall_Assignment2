@@ -28,12 +28,21 @@ namespace _2019_Fall_Assignment2
             string word = "cba";
             Console.WriteLine("Time taken to type with one finger = {0}\n", CalculateTime(keyboard, word));
 
-            int[,] image = { { 1, 1, 0 }, { 1, 0, 1 }, { 0, 0, 0 } };
-            int[,] flipAndInvertedImage = FlipAndInvertImage(image);
-            Console.WriteLine("The resulting flipped and inverted image is:\n");
-            Display2DArray(flipAndInvertedImage);
-            Console.Write("\n");
+            //FlipAndInvertImage
+            int[,] a = { { 1, 1, 0, 0 }, { 1, 0, 0, 1 }, { 0, 1, 1, 1 }, { 1, 0, 1, 0 } };
+            int[,] b = new int[a.GetLength(0), a.GetLength(1)];
+            b=FlipAndInvertImage(a);
 
+            for (int i=0;i<b.GetLength(0);i++)
+            {
+             for(int j=0;j<b.GetLength(1);j++)
+                {
+                    Console.Write(b[i,j]);
+                }
+                Console.WriteLine();
+            }
+
+            //Minimummeetingrooms
             int[,] a = { { 40, 30 }, { 20, 10 }, { 15, 20 } };
             Console.WriteLine(MinMeetingRooms(a));
 
@@ -207,14 +216,40 @@ namespace _2019_Fall_Assignment2
         {
             try
             {
-                // Write your code here
+                int[,] b = new int[A.GetLength(0), A.GetLength(1)];
+                for (int i = 0; i < A.GetLength(0); i++)
+                {
+                int k = 0;
+                  for (int j = A.GetLength(1) - 1; j >= 0; j--)
+                  {
+
+                    b[i, k] = A[i, j];
+                    k++;
+                  }
+                }
+            for (int i = 0; i < A.GetLength(0); i++)
+            {
+                for (int j = 0; j < A.GetLength(1); j++)
+                {
+                    if (b[i, j] == 0)
+                    {
+                        b[i, j] = 1;
+                    }
+                    else
+                    {
+                        b[i, j] = 0;
+                    }
+
+                }
+            }return b;
+            
             }
             catch
             {
                 Console.WriteLine("Exception occured while computing FlipAndInvertImage()");
             }
 
-            return new int[,] { };
+            
         }
 
         public static int MinMeetingRooms(int[,] intervals)
