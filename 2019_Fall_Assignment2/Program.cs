@@ -43,8 +43,8 @@ namespace _2019_Fall_Assignment2
             }
 
             //Minimummeetingrooms
-            int[,] a = { { 40, 30 }, { 20, 10 }, { 15, 20 } };
-            Console.WriteLine(MinMeetingRooms(a));
+            int[,] intervals = { { 40, 30 }, { 20, 10 }, { 15, 20 } };
+            Console.WriteLine(MinMeetingRooms(intervals));
 
             int[] input = { -4, -1, 0, 3, 10 };
             int[] o = new int[input.Length];
@@ -200,9 +200,51 @@ namespace _2019_Fall_Assignment2
 
         public static int CalculateTime(string keyboard, string word)
         {
+            //SKS: Srikrishna Krishnarao Srinivasan Oct 6 2019
+            // Pseudocode
+            //1. Read input keyboard and word, say "abcdef" (0 to 5) and "face" (5 0 2 4), movements (0 to 5), (5 to 0), (0 to 2) and (2 to 4)
+            //2. Store the keyboard in a Dictionary - Key = character, value = digit 0 to length of string
+            //3. Read second string, first and second character and find their values. 
+            //3a. Read difference between the two. Store the difference in a sum variable.
+            //3b. Hold the second number and read the third character value. Find the difference and add to sum.
+            //3c. Repeat until end of the string 2 is reached and report the answer.
+            //4. Boundary conditions: i. single character ii. All characters same iii. very long string iv. repeating pattern string
+
             try
             {
                 // Write your code here
+                //Initialize
+                int sum = 0, v = 0, v1 = 0, v2=0 ;
+                string c=null, w1=null, w2=null;
+
+                Dictionary<string, int> chrval = new Dictionary<string, int>();
+                for (int i = 0; i < keyboard.Length; i++)
+                {
+                    c = keyboard.Substring(i, 1);
+                    v = i;
+                    chrval.Add(c, v); //Store in dictionary
+                }
+                
+                for (int i=0; i< word.Length; i++)
+                {
+                    if (i==0)
+                    {
+                        w1 = word.Substring(i, 1);
+                        v1 = chrval[w1]; //Lookup value from dictionary
+                        sum = v1;
+                    }
+                    else // i>0
+                    {
+                        //w1 = word.Substring(i - 1, 1);
+                        w2 = word.Substring(i, 1);
+                        v2 = chrval[w2];
+                        sum += Math.Abs(v1 - v2); //Keep a running sum of (charx-1, charx)
+
+                        w1 = w2; //After looking up the val, set current char as previous char
+                        v1 = v2;
+                    }
+                }
+                return (sum);
             }
             catch
             {
@@ -214,10 +256,11 @@ namespace _2019_Fall_Assignment2
 
         public static int[,] FlipAndInvertImage(int[,] A)
         {
+            int[,] b = new int[A.GetLength(0), A.GetLength(1)];
             try
             {
-                int[,] b = new int[A.GetLength(0), A.GetLength(1)];
-                for (int i = 0; i < A.GetLength(0); i++)
+                
+               for (int i = 0; i < A.GetLength(0); i++)
                 {
                 int k = 0;
                   for (int j = A.GetLength(1) - 1; j >= 0; j--)
@@ -240,16 +283,19 @@ namespace _2019_Fall_Assignment2
                         b[i, j] = 0;
                     }
 
+
                 }
-            }return b;
+            }
+                
             
             }
             catch
             {
                 Console.WriteLine("Exception occured while computing FlipAndInvertImage()");
             }
+            return b;
 
-            
+
         }
 
         public static int MinMeetingRooms(int[,] intervals)
